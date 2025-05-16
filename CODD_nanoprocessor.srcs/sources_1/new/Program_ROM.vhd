@@ -24,7 +24,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
@@ -37,13 +37,7 @@ entity Program_ROM is
     end Program_ROM;
 
 architecture Behavioral of Program_ROM is
-
-begin
-
-
-end Behavioral;
-
----- Program that displays numbers by decrementing 10 by 1
+-- Program that displays numbers by decrementing 10 by 1
 type rom_type is array (0 to 7) of std_logic_vector(11 downto 0);
     signal PROGRAM_ROM : rom_type := (
         "101110001010", -- 0 -- MOVI R7, 10
@@ -54,8 +48,9 @@ type rom_type is array (0 to 7) of std_logic_vector(11 downto 0);
         "110000000011", -- 5 -- JZR R0, 3
         "111110000111", -- 6 -- JZR R1, 7 
         "110000000000"  -- 7 -- END
-   );   
+   ); 
      
 begin
     I <= PROGRAM_ROM(to_integer(unsigned(D)));
+
 end Behavioral;
