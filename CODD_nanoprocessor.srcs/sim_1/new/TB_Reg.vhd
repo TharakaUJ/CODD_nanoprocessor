@@ -37,16 +37,16 @@ end TB_Reg;
 
 architecture Behavioral of TB_Reg is
 component Reg
-    Port ( D : in STD_LOGIC_VECTOR (7 downto 0);
+    Port ( D : in STD_LOGIC_VECTOR (3 downto 0);
            Reset: in STD_LOGIC;
            Clk : in STD_LOGIC;
            En : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (7 downto 0));
+           Q : out STD_LOGIC_VECTOR (3 downto 0));
     end component;
     
-    signal D : STD_LOGIC_VECTOR (7 downto 0):= "00000000";
+    signal D : STD_LOGIC_VECTOR (3 downto 0):= "0000";
     signal Clk : STD_LOGIC:= '0';
-    signal Q : STD_LOGIC_VECTOR (7 downto 0);
+    signal Q : STD_LOGIC_VECTOR (3 downto 0);
     signal Reset: STD_LOGIC;
     signal En: STD_LOGIC:= '0';
 
@@ -64,20 +64,20 @@ begin
     process begin
             Reset <= '0';
             En <= '1';
-            D <= "00110101";
+            D <= "0101";
                     
             wait for 100ns;
             En <= '1';
-            D <= "10110001";
+            D <= "0001";
             
             wait for 100ns;
             En <= '1';
-            D <= "10010001";
+            D <= "0001";
             
             wait for 100ns;
             Reset <= '1';
             En <= '1';
-            D <= "00010101";
+            D <= "0101";
             wait;
                 
     end process;
