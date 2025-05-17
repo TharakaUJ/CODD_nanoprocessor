@@ -48,100 +48,103 @@ END Register_bank;
 
 ARCHITECTURE Behavioral OF Register_bank IS
 
-COMPONENT Reg
-    PORT (
-        clk : IN STD_LOGIC;
-        register_enable : IN STD_LOGIC;
-        data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-        data_out : OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
-    );
-END COMPONENT;
+    COMPONENT Reg
+        PORT (
+            D : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+            Reset : IN STD_LOGIC;
+            Clk : IN STD_LOGIC;
+            En : IN STD_LOGIC;
+            Q : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
 
-COMPONENT Decoder_3_8
-    PORT (
-        EN : IN STD_LOGIC;
-        I : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
-        Y : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
-    );
-END COMPONENT;
+    END COMPONENT;
 
-SIGNAL decoder_output : STD_LOGIC_VECTOR (7 DOWNTO 0);
+    COMPONENT Decoder_3_to_8
+        PORT (
+            EN : IN STD_LOGIC;
+            I : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+            Y : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+        );
+    END COMPONENT;
 
-
+    SIGNAL decoder_output : STD_LOGIC_VECTOR (7 DOWNTO 0);
 BEGIN
 
-    Decoder_3_8_0 : Decoder_3_8
-        PORT MAP (
-            EN => '1',
-            I => register_enable,
-            Y => decoder_output
-        );
+    Decoder_3_8_0 : Decoder_3_to_8
+    PORT MAP(
+        EN => '1',
+        I => register_enable,
+        Y => decoder_output
+    );
 
     Register_0 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(0),
-            data_in => data_in,
-            data_out => data_out0
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(0),
+        D => data_in,
+        Q => data_out0,
+        Reset => '0'
+    );
 
     Register_1 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(1),
-            data_in => data_in,
-            data_out => data_out1
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(1),
+        D => data_in,
+        Q => data_out1,
+        Reset => '0'
+    );
 
     Register_2 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(2),
-            data_in => data_in,
-            data_out => data_out2
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(2),
+        D => data_in,
+        Q => data_out2,
+        Reset => '0'
+    );
 
     Register_3 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(3),
-            data_in => data_in,
-            data_out => data_out3
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(3),
+        D => data_in,
+        Q => data_out3,
+        Reset => '0'
+    );
 
     Register_4 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(4),
-            data_in => data_in,
-            data_out => data_out4
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(4),
+        D => data_in,
+        Q => data_out4,
+        Reset => '0'
+    );
 
     Register_5 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(5),
-            data_in => data_in,
-            data_out => data_out5
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(5),
+        D => data_in,
+        Q => data_out5,
+        Reset => '0'
+    );
 
     Register_6 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(6),
-            data_in => data_in,
-            data_out => data_out6
-        );
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(6),
+        D => data_in,
+        Q => data_out6,
+        Reset => '0'
+    );
 
     Register_7 : Reg
-        PORT MAP (
-            clk => clk,
-            register_enable => decoder_output(7),
-            data_in => data_in,
-            data_out => data_out7
-        );
-
-
-    
-
+    PORT MAP(
+        Clk => clk,
+        En => decoder_output(7),
+        D => data_in,
+        Q => data_out7,
+        Reset => '0'
+    );
 END Behavioral;
