@@ -17,10 +17,8 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,15 +29,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Sim_Register_bank is
---  Port ( );
-end Sim_Register_bank;
+ENTITY Sim_Register_bank IS
+    --  Port ( );
+END Sim_Register_bank;
 
-architecture Behavioral of Sim_Register_bank is
-    component Register_bank
+ARCHITECTURE Behavioral OF Sim_Register_bank IS
+    COMPONENT Register_bank
         PORT (
             clk : IN STD_LOGIC;
             register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+            register_bank_enable : IN STD_LOGIC;
             data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -50,28 +49,28 @@ architecture Behavioral of Sim_Register_bank is
             data_out6 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out7 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
         );
-    end component;
+    END COMPONENT;
 
-    signal clk : STD_LOGIC;
-    signal register_enable : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    signal data_in : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out0 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out1 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out2 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out3 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out4 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out5 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out6 : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    signal data_out7 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL clk : STD_LOGIC;
+    SIGNAL register_enable : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL data_in : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out0 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out1 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out2 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out3 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out4 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out5 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out6 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL data_out7 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL register_bank_enable : STD_LOGIC;
 
-
-
-begin
+BEGIN
 
     UUT : Register_bank
-    port map(
+    PORT MAP(
         clk => clk,
         register_enable => register_enable,
+        register_bank_enable => register_bank_enable,
         data_in => data_in,
         data_out0 => data_out0,
         data_out1 => data_out1,
@@ -83,43 +82,43 @@ begin
         data_out7 => data_out7
     );
 
-    process
-    begin
+    PROCESS
+    BEGIN
         clk <= '0';
-        wait for 50 ns;
+        WAIT FOR 50 ns;
         clk <= '1';
-        wait for 50 ns;
-    end process;
+        WAIT FOR 50 ns;
+    END PROCESS;
 
-    process
-    -- index: 230278M -> 111 000 001 110 000 110
+    PROCESS
+        -- index: 230278M -> 111 000 001 110 000 110
 
-    begin
+    BEGIN
+        register_bank_enable <= '1';
         register_enable <= "111"; -- reg 7
-        data_in <= "0000";        -- val 0
-        wait for 100 ns;
+        data_in <= "0000"; -- val 0
+        WAIT FOR 100 ns;
 
         register_enable <= "000"; -- reg 0
-        data_in <= "0001";        -- val 1
-        wait for 100 ns;
+        data_in <= "0001"; -- val 1
+        WAIT FOR 100 ns;
 
         register_enable <= "001"; -- reg 1
-        data_in <= "0010";        -- val 2
-        wait for 100 ns;
+        data_in <= "0010"; -- val 2
+        WAIT FOR 100 ns;
 
         register_enable <= "110"; -- reg 6
-        data_in <= "0011";        -- val 3
-        wait for 100 ns;
+        data_in <= "0011"; -- val 3
+        WAIT FOR 100 ns;
 
         register_enable <= "000"; -- reg 0
-        data_in <= "0100";        -- val 4
-        wait for 100 ns;
+        data_in <= "0100"; -- val 4
+        WAIT FOR 100 ns;
 
+        register_bank_enable <= '0'; -- regiser bank disabled
         register_enable <= "110"; -- reg 6
-        data_in <= "0101";        -- val 5
-        wait;
-    end process;
+        data_in <= "0101"; -- val 5
+        WAIT;
+    END PROCESS;
 
-
-
-end Behavioral;
+END Behavioral;

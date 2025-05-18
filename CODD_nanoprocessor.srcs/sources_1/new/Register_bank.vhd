@@ -33,6 +33,7 @@ ENTITY Register_bank IS
     PORT (
         clk : IN STD_LOGIC;
         register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        register_bank_enable : IN STD_LOGIC;
         data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
         data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
         data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -71,7 +72,7 @@ BEGIN
 
     Decoder_3_8_0 : Decoder_3_to_8
     PORT MAP(
-        EN => '1',
+        EN => register_bank_enable,
         I => register_enable,
         Y => decoder_output
     );
