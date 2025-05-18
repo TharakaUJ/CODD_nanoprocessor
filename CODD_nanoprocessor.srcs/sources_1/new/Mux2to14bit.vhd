@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 05/16/2025 01:36:26 PM
+-- Create Date: 05/16/2025 10:42:51 AM
 -- Design Name: 
--- Module Name: Decoder_2_to_4 - Behavioral
+-- Module Name: Mux2to1_4bit - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,19 +31,19 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Decoder_2_to_4 is
-    Port ( I : in STD_LOGIC_VECTOR (1 downto 0);
-           EN : in STD_LOGIC;
-           Y : out STD_LOGIC_VECTOR (3 downto 0));
-end Decoder_2_to_4;
+entity Mux2to1_4bit is
+    Port ( sel : in STD_LOGIC;
+           a : in STD_LOGIC_VECTOR (3 downto 0);
+           b : in STD_LOGIC_VECTOR (3 downto 0);
+           y : out STD_LOGIC_VECTOR (3 downto 0));
+end Mux2to1_4bit;
 
-architecture Behavioral of Decoder_2_to_4 is
+architecture gate_level of Mux2to1_4bit is
 
 begin
-    Y(0) <= EN and not(I(0)) and not(I(1));
-    Y(1) <= EN and (I(0)) and not(I(1));
-    Y(2) <= EN and not(I(0)) and (I(1));
-    Y(3) <= EN and (I(0)) and (I(1));
-    
+    y(0) <= (a(0) and not sel) or (b(0) and sel);
+    y(1) <= (a(1) and not sel) or (b(1) and sel);
+    y(2) <= (a(2) and not sel) or (b(2) and sel);
+    y(3) <= (a(3) and not sel) or (b(3) and sel);
 
-end Behavioral;
+end gate_level; 

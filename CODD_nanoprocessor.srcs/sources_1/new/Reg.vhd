@@ -32,11 +32,11 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity Reg is
-    Port ( D : in STD_LOGIC_VECTOR (7 downto 0);
+    Port ( D : in STD_LOGIC_VECTOR (3 downto 0);
            Reset : in STD_LOGIC;
            Clk : in STD_LOGIC;
            En : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (7 downto 0));
+           Q : out STD_LOGIC_VECTOR (3 downto 0));
 end Reg;
 
 architecture Behavioral of Reg is
@@ -53,7 +53,7 @@ begin
 
     Clk_With_Enabled <= Clk and En;
 
-     gen_ff: for i in 0 to 7 generate
+     gen_ff: for i in 0 to 3 generate
         FF_inst: D_FF
             port map(
                 D   => D(i),
