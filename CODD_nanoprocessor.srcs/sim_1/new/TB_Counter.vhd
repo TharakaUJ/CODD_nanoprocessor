@@ -69,6 +69,8 @@ clk_process :process
          wait for 5 ns;
     end loop;
 end process;
+                    --230514K(INDEX)
+                    --230146H
           
               -- Stimulus process
 stim_proc: process
@@ -79,15 +81,15 @@ stim_proc: process
         Res <= '0';
           
                   -- Apply first input
-        D <= "001";
+        D <= "101"; --5
         wait for 10 ns;
           
                   -- Apply second input
-        D <= "101";
+        D <= "001"; --1
         wait for 10 ns;
           
                   -- Apply third input
-        D <= "111";
+        D <= "100"; --4
         wait for 10 ns;
           
                   -- Apply reset again
@@ -96,7 +98,7 @@ stim_proc: process
         Res <= '0';
           
                   -- Final input
-        D <= "010";
+        D <= "110"; --6
         wait for 10 ns;
           
     wait;
