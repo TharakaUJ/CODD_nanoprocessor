@@ -1,0 +1,101 @@
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: 
+-- 
+-- Create Date: 05/18/2025 04:15:02 PM
+-- Design Name: 
+-- Module Name: Sim_Nanoprocessor - Behavioral
+-- Project Name: 
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--use IEEE.NUMERIC_STD.ALL;
+
+-- Uncomment the following library declaration if instantiating
+-- any Xilinx leaf cells in this code.
+--library UNISIM;
+--use UNISIM.VComponents.all;
+
+ENTITY Sim_Nanoprocessor IS
+    --  Port ( );
+END Sim_Nanoprocessor;
+
+ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
+    COMPONENT Nanoprocessor
+        PORT (
+            clk_in: IN STD_LOGIC;
+            reset : IN STD_LOGIC;
+            overflow : OUT STD_LOGIC;
+            zero : OUT STD_LOGIC;
+            reg_out0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    SIGNAL clk_in: STD_LOGIC;
+    SIGNAL reset : STD_LOGIC;
+    SIGNAL overflow : STD_LOGIC;
+    SIGNAL zero : STD_LOGIC;
+    SIGNAL data_out0 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out1 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out2 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out3 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out4 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out5 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out6 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL data_out7 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+BEGIN
+
+    UUT : Nanoprocessor
+    PORT MAP(
+        clk_in => clk_in,
+        reset => reset,
+        overflow => overflow,
+        zero => zero,
+        reg_out0 => data_out0,
+        reg_out1 => data_out1,
+        reg_out2 => data_out2,
+        reg_out3 => data_out3,
+        reg_out4 => data_out4,
+        reg_out5 => data_out5,
+        reg_out6 => data_out6,
+        reg_out7 => data_out7
+    );
+
+    PROCESS
+    BEGIN
+        WAIT FOR 5ns;
+        clk_in <= '1';
+        WAIT FOR 5ns;
+        clk_in <= '0';
+    END PROCESS;
+
+    PROCESS
+    BEGIN
+        Reset <= '1';
+        WAIT FOR 20ns;
+
+        Reset <= '0';
+        WAIT;
+    END PROCESS;
+
+END Behavioral;
