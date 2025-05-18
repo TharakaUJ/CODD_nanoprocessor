@@ -31,9 +31,18 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Nanoprocessor IS
     PORT (
+        clk_in: IN STD_LOGIC;
         reset : IN STD_LOGIC;
         overflow : OUT STD_LOGIC;
-        zero : OUT STD_LOGIC
+        zero : OUT STD_LOGIC;
+        reg_out0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -41,6 +50,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
 
     COMPONENT Slow_Clk IS
         PORT (
+            Clk_in : IN STD_LOGIC;
             Clk_out : OUT STD_LOGIC
         );
     END COMPONENT;
@@ -107,7 +117,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
     COMPONENT Register_bank IS
         PORT (
             clk : IN STD_LOGIC;
-            reg_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+            register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
             data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -176,7 +186,8 @@ BEGIN
 
     slow_clock : Slow_Clk
     PORT MAP(
-        clk_out => clk
+        Clk_in => clk_in,
+        Clk_out => clk
     );
 
     program_rom_0 : Program_ROM
@@ -236,7 +247,7 @@ BEGIN
     reg_bank : Register_bank
     PORT MAP(
         clk => clk,
-        reg_enable => Enable_Reg,
+        register_enable => Enable_Reg,
         data_in => data_in_reg_bank,
         data_out0 => data_out0,
         data_out1 => data_out1,
@@ -285,5 +296,15 @@ BEGIN
         C_out => overflow,
         Zero_Flag => zero
     );
+
+
+    reg_out0 <= data_out0; 
+    reg_out1 <= data_out1; 
+    reg_out2 <= data_out2; 
+    reg_out3 <= data_out3; 
+    reg_out4 <= data_out4; 
+    reg_out5 <= data_out5; 
+    reg_out6 <= data_out6; 
+    reg_out7 <= data_out7; 
 
 END Behavioral;
