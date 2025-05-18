@@ -60,24 +60,27 @@ begin
     );
     
     CLK <= not CLK after 50ns;
+
+        --INDEX (230514K)
+        --INDEX (230146H) TO BINARY --> 11 1000 0000 0011 1010
     
     process begin
             Reset <= '0';
             En <= '1';
-            D <= "0101";
+            D <= "1110"; -- 14 FROM 514K
                     
             wait for 100ns;
             En <= '1';
-            D <= "0001";
+            D <= "1010"; -- FROM 230146h binary last 4 bits
             
             wait for 100ns;
             En <= '1';
-            D <= "0001";
+            D <= "0011"; --binary 230146H
             
             wait for 100ns;
             Reset <= '1';
             En <= '1';
-            D <= "0101";
+            D <= "1000"; --binary 230146H
             wait;
                 
     end process;
