@@ -48,7 +48,14 @@ ENTITY Nanoprocessor IS
         printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
         printJumpFlag : OUT STD_LOGIC;
         printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+        printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printLoadSelect : OUT STD_LOGIC;
+        printadd_sub_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printadd_sub_input_A : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printAdd_Sub_Select : OUT STD_LOGIC;
+        printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -124,6 +131,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
         PORT (
             clk : IN STD_LOGIC;
             register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+            register_bank_enable : IN STD_LOGIC;
             data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -255,6 +263,7 @@ BEGIN
     PORT MAP(
         clk => clk,
         register_enable => Enable_Reg,
+        register_bank_enable => R_Bank_Enable,
         data_in => data_in_reg_bank,
         data_out0 => data_out0,
         data_out1 => data_out1,
@@ -296,8 +305,8 @@ BEGIN
 
     add_sub_0 : Add_Sub
     PORT MAP(
-        A => add_sub_input_A,
-        B => add_sub_input_B,
+        A => add_sub_input_B,
+        B => add_sub_input_A,
         M => Add_Sub_Select,
         S => add_sub_output,
         C_out => overflow,
@@ -317,5 +326,13 @@ BEGIN
     printJumpFlag <= Jmp_Flag;
     printprogram_count_plus1 <= program_count_plus1;
     printJmpAddress <= Jmp_Address;
+    printLoadSelect <= Load_Select;
+    printadd_sub_output <= add_sub_output;
+    printadd_sub_input_A <= add_sub_input_A;
+    printadd_sub_input_B <= add_sub_input_B;
+    printAdd_Sub_Select <= Add_Sub_Select;
+    printdata_in_reg_bank <= data_in_reg_bank;
+    printEnable_Reg <= Enable_Reg;
+
 
 END Behavioral;

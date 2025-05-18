@@ -53,7 +53,14 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
             printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
             printJumpFlag : OUT STD_LOGIC;
             printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-            printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+            printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+            printLoadSelect : OUT STD_LOGIC;
+            printadd_sub_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            printadd_sub_input_A : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            printAdd_Sub_Select : OUT STD_LOGIC;
+            printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            printEnable_Reg : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -75,6 +82,14 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
     SIGNAL printJumpFlag : STD_LOGIC;
     SIGNAL printprogram_count_plus1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
     SIGNAL printJmpAddress : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL printLoadSelect : STD_LOGIC;
+    SIGNAL printadd_sub_output : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL printadd_sub_input_A : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL printadd_sub_input_B : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL printAdd_Sub_Select : STD_LOGIC;
+    siGNAL printdata_in_reg_bank : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL printEnable_Reg : STD_LOGIC_VECTOR(2 DOWNTO 0);
+
 BEGIN
 
     UUT : Nanoprocessor
@@ -96,7 +111,14 @@ BEGIN
         printInstruction => printInstruction,
         printJumpFlag => printJumpFlag,
         printprogram_count_plus1 => printprogram_count_plus1,
-        printJmpAddress => printJmpAddress
+        printJmpAddress => printJmpAddress,
+        printLoadSelect => printLoadSelect,
+        printadd_sub_output => printadd_sub_output,
+        printadd_sub_input_A => printadd_sub_input_A,
+        printadd_sub_input_B => printadd_sub_input_B,
+        printAdd_Sub_Select => printAdd_Sub_Select,
+        printdata_in_reg_bank => printdata_in_reg_bank,
+        printEnable_Reg => printEnable_Reg
     );
 
     PROCESS
