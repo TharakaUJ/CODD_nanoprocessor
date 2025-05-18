@@ -77,14 +77,7 @@ BEGIN
         Y => decoder_output
     );
 
-    Register_0 : Reg
-    PORT MAP(
-        Clk => clk,
-        En => decoder_output(0),
-        D => data_in,
-        Q => data_out0,
-        Reset => '0'
-    );
+    data_out0 <= "000";
 
     Register_1 : Reg
     PORT MAP(
