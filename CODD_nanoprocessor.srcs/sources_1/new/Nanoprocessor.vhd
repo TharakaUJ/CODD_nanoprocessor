@@ -34,7 +34,6 @@ ENTITY Nanoprocessor IS
         reset : IN STD_LOGIC;
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
-        clk : IN STD_LOGIC
     );
 END Nanoprocessor;
 
@@ -105,85 +104,189 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
             y : OUT STD_LOGIC_VECTOR (2 DOWNTO 0));
     END COMPONENT;
 
-    COMPONENT 
+    COMPONENT
 
-    SIGNAL clk, : STD_LOGIC;
-    SIGNAL program_count, program_counter_in, program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL jump_flag : STD_LOGIC;
+        COMPONENT Register_bank IS
+            PORT (
+                clk : IN STD_LOGIC;
+                reg_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+                data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out2 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out3 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out4 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out5 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out6 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+                data_out7 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+            );
+        END COMPONENT;
 
-    SIGNAL instruction : STD_LOGIC_VECTOR (11 DOWNTO 0);
-    SIGNAL Enable_Reg : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL R_A_Select : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL R_B_Select : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL Load_Select : STD_LOGIC;
-    SIGNAL Add_Sub_Select : STD_LOGIC;
-    SIGNAL Jmp_Flag : STD_LOGIC;
-    SIGNAL Jmp_Address : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL R_Bank_Enable : STD_LOGIC;
-    SIGNAL Imd_Val : STD_LOGIC_VECTOR (3 DOWNTO 0);
-    SIGNAL Jmp_Address : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        COMPONENT MUX_8to1_4bit IS
+            PORT (
+                r0 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r1 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r2 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r3 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r4 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r5 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r6 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                r7 : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                sel : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+                y : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
+        END COMPONENT;
 
-BEGIN
+        COMPONENT Mux2to1_4bit IS
+            PORT (
+                sel : IN STD_LOGIC;
+                a : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                b : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+                y : OUT STD_LOGIC_VECTOR (3 DOWNTO 0)
+            );
+        END COMPONENT;
 
-    slow_clock : Slow_Clk
-    PORT MAP(
-        clk_out => clk,
-    );
+        SIGNAL clk, : STD_LOGIC;
+        SIGNAL program_count, program_counter_in, program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL jump_flag : STD_LOGIC;
 
-    program_rom : Program_ROM
-    PORT MAP(
-        D => program_count,
-        I => instruction
-    );
+        SIGNAL instruction : STD_LOGIC_VECTOR (11 DOWNTO 0);
+        SIGNAL Enable_Reg : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL R_A_Select : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL R_B_Select : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL Load_Select : STD_LOGIC;
+        SIGNAL Add_Sub_Select : STD_LOGIC;
+        SIGNAL Jmp_Flag : STD_LOGIC;
+        SIGNAL Jmp_Address : STD_LOGIC_VECTOR (2 DOWNTO 0);
+        SIGNAL R_Bank_Enable : STD_LOGIC;
+        SIGNAL Imd_Val : STD_LOGIC_VECTOR (3 DOWNTO 0);
+        SIGNAL Jmp_Address : STD_LOGIC_VECTOR (2 DOWNTO 0);
 
-    adder_3_bit : Adder_3_Bit
-    PORT MAP(
-        A => program_count,
-        B => '1',
-        C_in => '0',
-        S => program_count_plus1,
-        C_out => overflow
-    );
+        SIGNAL data_in_reg_bank : STD_LOGIC_VECTOR (3 DOWNTO 0);
 
-    mux_2to1_3bit : MUX_2to1_3bit
-    PORT MAP(
-        a => program_count_plus1,
-        b => Jmp_Address,
-        sel => Jmp_Flag,
-        y => program_counter_in
-    );
+        SIGNAL data_out0 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out1 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out2 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out3 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out4 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out5 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out6 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        SIGNAL data_out7 : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
-    program_counter : Counter
-    PORT MAP(
-        D => program_counter_in,
-        Res => reset,
-        Clk => clk,
-        Q => program_count
-    );
+        SIGNAL add_sub_input_A : STD_LOGIC(3 DOWNTO 0);
+        SIGNAL add_sub_input_B : STD_LOGIC(3 DOWNTO 0);
+        SIGNAL add_sub_output : STD_LOGIC(3 DOWNTO 0);
+    BEGIN
 
-    instruction_decoder : Instruction_decoder
-    PORT MAP(
-        I => instruction,
-        Reg_jmp_Check = >, -- connect this to output of 1 first mux from reg bank
-        Enable_Reg => Enable_Reg,
-        R_A_Select => R_A_Select,
-        R_B_Select => R_B_Select,
-        Load_Select => Load_Select,
-        Add_Sub_Select => Add_Sub_Select,
-        Jmp_Flag => Jmp_Flag,
-        Jmp_Address => Jmp_Address,
-        R_Bank_Enable => R_Bank_Enable,
-        Imd_Val => Imd_Val
-    );
+        slow_clock : Slow_Clk
+        PORT MAP(
+            clk_out => clk,
+        );
 
-    add_sub : Add_Sub
-    PORT MAP(
-        A => ,
-        B => ,
-        M => ,
-        S => ,
-        C_out => overflow,
-        Zero_Flag => zero
-    );
+        program_rom : Program_ROM
+        PORT MAP(
+            D => program_count,
+            I => instruction
+        );
 
-END Behavioral;
+        adder_3_bit : Adder_3_Bit
+        PORT MAP(
+            A => program_count,
+            B => '1',
+            C_in => '0',
+            S => program_count_plus1,
+            C_out => overflow
+        );
+
+        mux_2to1_3bit : MUX_2to1_3bit
+        PORT MAP(
+            a => program_count_plus1,
+            b => Jmp_Address,
+            sel => Jmp_Flag,
+            y => program_counter_in
+        );
+
+        program_counter : Counter
+        PORT MAP(
+            D => program_counter_in,
+            Res => reset,
+            Clk => clk,
+            Q => program_count
+        );
+
+        instruction_decoder : Instruction_decoder
+        PORT MAP(
+            I => instruction,
+            Reg_jmp_Check => add_sub_input_A,
+            Enable_Reg => Enable_Reg,
+            R_A_Select => R_A_Select,
+            R_B_Select => R_B_Select,
+            Load_Select => Load_Select,
+            Add_Sub_Select => Add_Sub_Select,
+            Jmp_Flag => Jmp_Flag,
+            Jmp_Address => Jmp_Address,
+            R_Bank_Enable => R_Bank_Enable,
+            Imd_Val => Imd_Val
+        );
+
+        reg_bank_in_mux : Mux2to1_4bit
+        PORT MAP(
+            a => Imd_Val,
+            b => add_sub_output,
+            sel => Load_Select,
+            y => data_in_reg_bank
+        );
+
+        reg_bank : Register_bank
+        PORT MAP(
+            clk => clk,
+            reg_enable => Enable_Reg,
+            data_in => data_in_reg_bank,
+            data_out0 => data_out0,
+            data_out1 => data_out1,
+            data_out2 => data_out2,
+            data_out3 => data_out3,
+            data_out4 => data_out4,
+            data_out5 => data_out5,
+            data_out6 => data_out6,
+            data_out7 => data_out7
+        );
+
+        input_mux_A : MUX_8to1_4bit
+        PORT MAP(
+            r0 => data_out0,
+            r1 => data_out1,
+            r2 => data_out2,
+            r3 => data_out3,
+            r4 => data_out4,
+            r5 => data_out5,
+            r6 => data_out6,
+            r7 => data_out7,
+            sel => R_A_Select,
+            y => add_sub_input_A
+        );
+
+        input_mux_B : MUX_8to1_4bit
+        PORT MAP(
+            r0 => data_out0,
+            r1 => data_out1,
+            r2 => data_out2,
+            r3 => data_out3,
+            r4 => data_out4,
+            r5 => data_out5,
+            r6 => data_out6,
+            r7 => data_out7,
+            sel => R_B_Select,
+            y => add_sub_input_B
+        );
+
+        add_sub : Add_Sub
+        PORT MAP(
+            A => add_sub_input_A,
+            B => add_sub_input_B,
+            M => Add_Sub_Select,
+            S => add_sub_output,
+            C_out => overflow,
+            Zero_Flag => zero
+        );
+
+    END Behavioral;
