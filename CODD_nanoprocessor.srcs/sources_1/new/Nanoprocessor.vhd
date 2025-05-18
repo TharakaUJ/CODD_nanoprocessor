@@ -31,7 +31,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Nanoprocessor IS
     PORT (
-        clk_in: IN STD_LOGIC;
+        clk_in : IN STD_LOGIC;
         reset : IN STD_LOGIC;
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
@@ -42,7 +42,13 @@ ENTITY Nanoprocessor IS
         reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
         reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
         reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+        reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        pc : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+        printClock : OUT STD_LOGIC;
+        printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+        printJumpFlag : OUT STD_LOGIC;
+        printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -154,8 +160,9 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
     END COMPONENT;
 
     SIGNAL clk : STD_LOGIC;
-    SIGNAL program_count, program_counter_in, program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
-    SIGNAL jump_flag : STD_LOGIC;
+    SIGNAL program_count : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL program_counter_in : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
 
     SIGNAL instruction : STD_LOGIC_VECTOR (11 DOWNTO 0);
     SIGNAL Enable_Reg : STD_LOGIC_VECTOR (2 DOWNTO 0);
@@ -199,8 +206,8 @@ BEGIN
     adder_3_bit_0 : Adder_3_Bit
     PORT MAP(
         A => program_count,
-        B => "000",
-        C_in => '1',
+        B => "001",
+        C_in => '0',
         S => program_count_plus1,
         C_out => overflow
     );
@@ -238,8 +245,8 @@ BEGIN
 
     reg_bank_in_mux : Mux2to1_4bit
     PORT MAP(
-        a => Imd_Val,
-        b => add_sub_output,
+        a => add_sub_output,
+        b => Imd_Val,
         sel => Load_Select,
         y => data_in_reg_bank
     );
@@ -296,15 +303,19 @@ BEGIN
         C_out => overflow,
         Zero_Flag => zero
     );
-
-
-    reg_out0 <= data_out0; 
-    reg_out1 <= data_out1; 
-    reg_out2 <= data_out2; 
-    reg_out3 <= data_out3; 
-    reg_out4 <= data_out4; 
-    reg_out5 <= data_out5; 
-    reg_out6 <= data_out6; 
-    reg_out7 <= data_out7; 
+    reg_out0 <= data_out0;
+    reg_out1 <= data_out1;
+    reg_out2 <= data_out2;
+    reg_out3 <= data_out3;
+    reg_out4 <= data_out4;
+    reg_out5 <= data_out5;
+    reg_out6 <= data_out6;
+    reg_out7 <= data_out7;
+    pc <= program_count;
+    printClock <= clk;
+    printInstruction <= instruction;
+    printJumpFlag <= Jmp_Flag;
+    printprogram_count_plus1 <= program_count_plus1;
+    printJmpAddress <= Jmp_Address;
 
 END Behavioral;
