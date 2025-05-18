@@ -36,7 +36,7 @@ END Sim_Nanoprocessor;
 ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
     COMPONENT Nanoprocessor
         PORT (
-            clk_in: IN STD_LOGIC;
+            clk_in : IN STD_LOGIC;
             reset : IN STD_LOGIC;
             overflow : OUT STD_LOGIC;
             zero : OUT STD_LOGIC;
@@ -47,11 +47,17 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
             reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
             reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
             reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
+            reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            pc : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+            printClock : OUT STD_LOGIC;
+            printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+            printJumpFlag : OUT STD_LOGIC;
+            printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+            printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
         );
     END COMPONENT;
 
-    SIGNAL clk_in: STD_LOGIC;
+    SIGNAL clk_in : STD_LOGIC;
     SIGNAL reset : STD_LOGIC;
     SIGNAL overflow : STD_LOGIC;
     SIGNAL zero : STD_LOGIC;
@@ -63,6 +69,12 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
     SIGNAL data_out5 : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL data_out6 : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL data_out7 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL pc : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL printClock : STD_LOGIC;
+    SIGNAL printInstruction : STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL printJumpFlag : STD_LOGIC;
+    SIGNAL printprogram_count_plus1 : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL printJmpAddress : STD_LOGIC_VECTOR(2 DOWNTO 0);
 BEGIN
 
     UUT : Nanoprocessor
@@ -78,21 +90,28 @@ BEGIN
         reg_out4 => data_out4,
         reg_out5 => data_out5,
         reg_out6 => data_out6,
-        reg_out7 => data_out7
+        reg_out7 => data_out7,
+        pc => pc,
+        printClock => printClock,
+        printInstruction => printInstruction,
+        printJumpFlag => printJumpFlag,
+        printprogram_count_plus1 => printprogram_count_plus1,
+        printJmpAddress => printJmpAddress
     );
 
     PROCESS
     BEGIN
-        WAIT FOR 5ns;
         clk_in <= '1';
         WAIT FOR 5ns;
         clk_in <= '0';
+        WAIT FOR 5ns;
+
     END PROCESS;
 
     PROCESS
     BEGIN
         Reset <= '1';
-        WAIT FOR 20ns;
+        WAIT FOR 200ns;
 
         Reset <= '0';
         WAIT;
