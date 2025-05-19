@@ -39,6 +39,7 @@ ARCHITECTURE Behavioral OF Sim_Register_bank IS
             clk : IN STD_LOGIC;
             register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
             register_bank_enable : IN STD_LOGIC;
+            reset : IN STD_LOGIC;
             data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -63,6 +64,7 @@ ARCHITECTURE Behavioral OF Sim_Register_bank IS
     SIGNAL data_out6 : STD_LOGIC_VECTOR (3 DOWNTO 0);
     SIGNAL data_out7 : STD_LOGIC_VECTOR (3 DOWNTO 0);
     SIGNAL register_bank_enable : STD_LOGIC;
+    SIGNAL reset : STD_LOGIC := '0';
 
 BEGIN
 
@@ -79,7 +81,8 @@ BEGIN
         data_out4 => data_out4,
         data_out5 => data_out5,
         data_out6 => data_out6,
-        data_out7 => data_out7
+        data_out7 => data_out7,
+        reset => reset
     );
 
     PROCESS
@@ -94,6 +97,7 @@ BEGIN
         -- index: 230278M -> 111 000 001 110 000 110
 
     BEGIN
+
         register_bank_enable <= '1';
         register_enable <= "111"; -- reg 7
         data_in <= "0000"; -- val 0
@@ -116,6 +120,14 @@ BEGIN
         WAIT FOR 100 ns;
 
         register_bank_enable <= '0'; -- regiser bank disabled
+        register_enable <= "110"; -- reg 6
+        data_in <= "0101"; -- val 5
+
+        register_bank_enable <= '1'; -- regiser bank enabled
+        reset <= '1'; -- reset 
+        WAIT FOR 100 ns;
+        reset <= '0'; -- reset
+        WAIT FOR 100 ns;
         register_enable <= "110"; -- reg 6
         data_in <= "0101"; -- val 5
         WAIT;
