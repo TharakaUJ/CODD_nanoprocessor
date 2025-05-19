@@ -60,7 +60,9 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
             printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
             printAdd_Sub_Select : OUT STD_LOGIC;
             printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            printEnable_Reg : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
+            printEnable_Reg : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+            printR_A_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+            printR_B_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -87,8 +89,10 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
     SIGNAL printadd_sub_input_A : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL printadd_sub_input_B : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL printAdd_Sub_Select : STD_LOGIC;
-    siGNAL printdata_in_reg_bank : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL printdata_in_reg_bank : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL printEnable_Reg : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL printR_A_Select : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL printR_B_Select : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
 BEGIN
 
@@ -118,7 +122,9 @@ BEGIN
         printadd_sub_input_B => printadd_sub_input_B,
         printAdd_Sub_Select => printAdd_Sub_Select,
         printdata_in_reg_bank => printdata_in_reg_bank,
-        printEnable_Reg => printEnable_Reg
+        printEnable_Reg => printEnable_Reg,
+        printR_A_Select => printR_A_Select,
+        printR_B_Select => printR_B_Select
     );
 
     PROCESS

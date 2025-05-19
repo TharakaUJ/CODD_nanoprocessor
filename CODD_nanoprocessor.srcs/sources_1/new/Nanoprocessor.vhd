@@ -55,7 +55,9 @@ ENTITY Nanoprocessor IS
         printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
         printAdd_Sub_Select : OUT STD_LOGIC;
         printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0)
+        printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+        printR_A_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printR_B_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -132,6 +134,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
             clk : IN STD_LOGIC;
             register_enable : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
             register_bank_enable : IN STD_LOGIC;
+            reset : IN STD_LOGIC;
             data_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out0 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
             data_out1 : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -171,6 +174,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
     SIGNAL program_count : STD_LOGIC_VECTOR (2 DOWNTO 0);
     SIGNAL program_counter_in : STD_LOGIC_VECTOR (2 DOWNTO 0);
     SIGNAL program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL pcoverflow : STD_LOGIC;
 
     SIGNAL instruction : STD_LOGIC_VECTOR (11 DOWNTO 0);
     SIGNAL Enable_Reg : STD_LOGIC_VECTOR (2 DOWNTO 0);
@@ -217,7 +221,7 @@ BEGIN
         B => "001",
         C_in => '0',
         S => program_count_plus1,
-        C_out => overflow
+        C_out => pcoverflow
     );
 
     mux_2to1_3bit_0 : MUX_2to1_3bit
@@ -264,6 +268,7 @@ BEGIN
         clk => clk,
         register_enable => Enable_Reg,
         register_bank_enable => R_Bank_Enable,
+        reset => reset,
         data_in => data_in_reg_bank,
         data_out0 => data_out0,
         data_out1 => data_out1,
@@ -333,6 +338,6 @@ BEGIN
     printAdd_Sub_Select <= Add_Sub_Select;
     printdata_in_reg_bank <= data_in_reg_bank;
     printEnable_Reg <= Enable_Reg;
-
-
+    printR_A_Select <= R_A_Select;
+    printR_B_Select <= R_B_Select;
 END Behavioral;
