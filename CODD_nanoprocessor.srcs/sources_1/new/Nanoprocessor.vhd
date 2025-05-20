@@ -35,31 +35,31 @@ ENTITY Nanoprocessor IS
         reset : IN STD_LOGIC;
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
-        Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+        Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+        reg_out0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        pc : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+        printClock : OUT STD_LOGIC;
+        printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+        printJumpFlag : OUT STD_LOGIC;
+        printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printLoadSelect : OUT STD_LOGIC;
+        printadd_sub_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printadd_sub_input_A : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printAdd_Sub_Select : OUT STD_LOGIC;
+        printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
+        printR_A_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+        printR_B_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
 
-        -- reg_out0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- pc : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
-        -- printClock : OUT STD_LOGIC;
-        -- printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-        -- printJumpFlag : OUT STD_LOGIC;
-        -- printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        -- printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        -- printLoadSelect : OUT STD_LOGIC;
-        -- printadd_sub_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- printadd_sub_input_A : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- printAdd_Sub_Select : OUT STD_LOGIC;
-        -- printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        -- printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
-        -- printR_A_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        -- printR_B_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -117,10 +117,10 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
 
     COMPONENT Counter IS
         PORT (
-            D : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+            D : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
             Res : IN STD_LOGIC;
             Clk : IN STD_LOGIC;
-            Q : OUT STD_LOGIC_VECTOR (2 DOWNTO 0));
+            Q : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
     END COMPONENT;
 
     COMPONENT MUX_2to1_3bit IS
@@ -183,6 +183,10 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
     SIGNAL program_count : STD_LOGIC_VECTOR (2 DOWNTO 0);
     SIGNAL program_counter_in : STD_LOGIC_VECTOR (2 DOWNTO 0);
     SIGNAL program_count_plus1 : STD_LOGIC_VECTOR (2 DOWNTO 0);
+    SIGNAL program_count_4bit : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL program_count_4bit_plus1 : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL program_counter_in_4bit : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL jump_address_4bit : STD_LOGIC_VECTOR (3 DOWNTO 0);
     SIGNAL pcoverflow : STD_LOGIC;
 
     SIGNAL instruction : STD_LOGIC_VECTOR (11 DOWNTO 0);
@@ -224,29 +228,31 @@ BEGIN
         I => instruction
     );
 
-    adder_3_bit_0 : Adder_3_Bit
+    adder_3_bit_0 : Add_Sub
     PORT MAP(
-        A => program_count,
-        B => "001",
-        C_in => '0',
-        S => program_count_plus1,
-        C_out => pcoverflow
+        A => program_count_4bit,
+        B => "0001",
+        -- C_in => '0',
+        M => '0',
+        S => program_count_4bit_plus1,
+        C_out => pcoverflow,
+        Zero_Flag => zero
     );
 
-    mux_2to1_3bit_0 : MUX_2to1_3bit
+    mux_2to1_3bit_0 : Mux2to1_4bit
     PORT MAP(
-        a => program_count_plus1,
-        b => Jmp_Address,
+        a => program_count_4bit_plus1,
+        b => jump_address_4bit,
         sel => Jmp_Flag,
-        y => program_counter_in
+        y => program_counter_in_4bit
     );
 
     program_counter : Counter
     PORT MAP(
-        D => program_counter_in,
+        D => program_counter_in_4bit,
         Res => reset,
         Clk => clk,
-        Q => program_count
+        Q => program_count_4bit
     );
 
     instruction_decoder_0 : Instruction_decoder
@@ -276,7 +282,7 @@ BEGIN
     PORT MAP(
         clk => clk,
         register_enable => Enable_Reg,
-        register_bank_enable => R_Bank_Enable,
+        register_bank_enable => R_Bank_Enable and program_count_4bit(0),
         reset => reset,
         data_in => data_in_reg_bank,
         data_out0 => data_out0,
@@ -332,29 +338,32 @@ BEGIN
         address => data_out7,
         data => Cathode_7Seg
     );
-    -- Uncomment the following lines to enable output signals for debugging
+    program_count <= program_count_4bit(3 DOWNTO 1);
+    program_counter_in <= program_counter_in_4bit(3 DOWNTO 1);
+    jump_address_4bit(3 downto 1) <= Jmp_Address;
+    jump_address_4bit(0) <= '0';
 
-    -- reg_out0 <= data_out0;
-    -- reg_out1 <= data_out1;
-    -- reg_out2 <= data_out2;
-    -- reg_out3 <= data_out3;
-    -- reg_out4 <= data_out4;
-    -- reg_out5 <= data_out5;
-    -- reg_out6 <= data_out6;
-    -- reg_out7 <= data_out7;
-    -- pc <= program_count;
-    -- printClock <= clk;
-    -- printInstruction <= instruction;
-    -- printJumpFlag <= Jmp_Flag;
-    -- printprogram_count_plus1 <= program_count_plus1;
-    -- printJmpAddress <= Jmp_Address;
-    -- printLoadSelect <= Load_Select;
-    -- printadd_sub_output <= add_sub_output;
-    -- printadd_sub_input_A <= add_sub_input_A;
-    -- printadd_sub_input_B <= add_sub_input_B;
-    -- printAdd_Sub_Select <= Add_Sub_Select;
-    -- printdata_in_reg_bank <= data_in_reg_bank;
-    -- printEnable_Reg <= Enable_Reg;
-    -- printR_A_Select <= R_A_Select;
-    -- printR_B_Select <= R_B_Select;
+    reg_out0 <= data_out0;
+    reg_out1 <= data_out1;
+    reg_out2 <= data_out2;
+    reg_out3 <= data_out3;
+    reg_out4 <= data_out4;
+    reg_out5 <= data_out5;
+    reg_out6 <= data_out6;
+    reg_out7 <= data_out7;
+    pc <= program_count;
+    printClock <= clk;
+    printInstruction <= instruction;
+    printJumpFlag <= Jmp_Flag;
+    printprogram_count_plus1 <= program_count_plus1;
+    printJmpAddress <= Jmp_Address;
+    printLoadSelect <= Load_Select;
+    printadd_sub_output <= add_sub_output;
+    printadd_sub_input_A <= add_sub_input_A;
+    printadd_sub_input_B <= add_sub_input_B;
+    printAdd_Sub_Select <= Add_Sub_Select;
+    printdata_in_reg_bank <= data_in_reg_bank;
+    printEnable_Reg <= Enable_Reg;
+    printR_A_Select <= R_A_Select;
+    printR_B_Select <= R_B_Select;
 END Behavioral;
