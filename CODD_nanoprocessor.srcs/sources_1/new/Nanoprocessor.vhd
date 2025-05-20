@@ -214,6 +214,7 @@ ARCHITECTURE Behavioral OF Nanoprocessor IS
     SIGNAL add_sub_input_A : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL add_sub_input_B : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL add_sub_output : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL dummyzeroflag : STD_LOGIC;
 BEGIN
 
     slow_clock : Slow_Clk
@@ -236,7 +237,7 @@ BEGIN
         M => '0',
         S => program_count_4bit_plus1,
         C_out => pcoverflow,
-        Zero_Flag => zero
+        Zero_Flag => dummyzeroflag
     );
 
     mux_2to1_3bit_0 : Mux2to1_4bit
