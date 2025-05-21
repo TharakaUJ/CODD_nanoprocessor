@@ -17,10 +17,8 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,42 +29,51 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Counter is
-    Port ( D : in STD_LOGIC_VECTOR (2 downto 0);
-           Res : in STD_LOGIC;
-           Clk : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (2 downto 0));
-end Counter;
+ENTITY Counter IS
+    PORT (
+        D : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        Res : IN STD_LOGIC;
+        Clk : IN STD_LOGIC;
+        Q : OUT STD_LOGIC_VECTOR (2 DOWNTO 0));
+END Counter;
 
-architecture Behavioral of Counter is
+ARCHITECTURE Behavioral OF Counter IS
 
-Component D_FF 
-    Port( D : in STD_LOGIC;
-          Res : in STD_LOGIC;
-          Clk : in STD_LOGIC;
-          Q : out STD_LOGIC);
-End Component;
+    COMPONENT D_FF
+        PORT (
+            D : IN STD_LOGIC;
+            En : IN STD_LOGIC;
+            Res : IN STD_LOGIC;
+            Clk : IN STD_LOGIC;
+            Q : OUT STD_LOGIC);
+    END COMPONENT;
 
-begin
+BEGIN
     D_FF0 : D_FF
-        Port map
-            ( D   => D(0),
-              Res => Res,
-              Clk => Clk,
-              Q   => Q(0));
-              
-    D_FF1 : D_FF
-        Port map
-            ( D   => D(1),
-              Res => Res,
-              Clk => Clk,
-              Q   => Q(1));
-              
-    D_FF2 : D_FF
-        Port map
-            ( D   => D(2),
-               Res => Res,
-               Clk => Clk,
-               Q   => Q(2));
+    PORT MAP
+    (
+        D => D(0),
+        En => '1',
+        Res => Res,
+        Clk => Clk,
+        Q => Q(0));
 
-end Behavioral;
+    D_FF1 : D_FF
+    PORT MAP
+    (
+        D => D(1),
+        En => '1',
+        Res => Res,
+        Clk => Clk,
+        Q => Q(1));
+
+    D_FF2 : D_FF
+    PORT MAP
+    (
+        D => D(2),
+        En => '1',
+        Res => Res,
+        Clk => Clk,
+        Q => Q(2));
+
+END Behavioral;
