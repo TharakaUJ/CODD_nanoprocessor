@@ -48,7 +48,7 @@ ARCHITECTURE Behavioral OF Sim_Nanoprocessor IS
     SIGNAL reset : STD_LOGIC;
     SIGNAL overflow : STD_LOGIC;
     SIGNAL zero : STD_LOGIC;
-    SIGNAL Cathode_7Seg : STD_LOGIC;
+    SIGNAL Cathode_7Seg : STD_LOGIC_VECTOR(6 DOWNTO 0);
 BEGIN
 
     UUT : Nanoprocessor
