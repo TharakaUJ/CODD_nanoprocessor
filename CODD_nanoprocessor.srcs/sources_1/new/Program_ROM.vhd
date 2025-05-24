@@ -17,29 +17,28 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
-use IEEE.NUMERIC_STD.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Program_ROM is
-    Port ( D : in STD_LOGIC_VECTOR (2 downto 0);
-        I : out STD_LOGIC_VECTOR (11 downto 0));
-    end Program_ROM;
+ENTITY Program_ROM IS
+    PORT (
+        D : IN STD_LOGIC_VECTOR (2 DOWNTO 0);
+        I : OUT STD_LOGIC_VECTOR (11 DOWNTO 0));
+END Program_ROM;
 
-architecture Behavioral of Program_ROM is
--- Program that displays numbers by decrementing 10 by 1
-type rom_type is array (0 to 7) of std_logic_vector(11 downto 0);
-    signal PROGRAM_ROM : rom_type := (
+ARCHITECTURE Behavioral OF Program_ROM IS
+    -- Program that displays numbers by decrementing 10 by 1
+    TYPE rom_type IS ARRAY (0 TO 7) OF STD_LOGIC_VECTOR(11 DOWNTO 0);
+    SIGNAL PROGRAM_ROM : rom_type := (
         "101110000010", -- 0 -- MOVI R7, 10
         "100100000001", -- 1 -- MOVI R2, 1
         "010100000000", -- 2 -- NEG R2
@@ -47,7 +46,7 @@ type rom_type is array (0 to 7) of std_logic_vector(11 downto 0);
         "111110000111", -- 4 -- JZR R7, 7
         "110000000011", -- 5 -- JZR R0, 3
         "111110000111", -- 6 -- JZR R1, 7 
-        "110000000000"  -- 7 -- END
+        "110000000000" -- 7 -- END
 
         -- "101110000010", -- 0 -- MOVI R7, 2
         -- "100100000001", -- 1 -- MOVI R2, 1
@@ -57,9 +56,9 @@ type rom_type is array (0 to 7) of std_logic_vector(11 downto 0);
         -- "001110100000", -- 2 -- ADD R7, R2
         -- "001110100000", -- 2 -- ADD R7, R2
         -- "110000000000"  -- 7 -- END
-   ); 
-     
-begin
+    );
+
+BEGIN
     I <= PROGRAM_ROM(to_integer(unsigned(D)));
 
-end Behavioral;
+END Behavioral;
