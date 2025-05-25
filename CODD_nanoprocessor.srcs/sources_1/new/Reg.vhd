@@ -17,10 +17,8 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -31,36 +29,40 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Reg is
-    Port ( D : in STD_LOGIC_VECTOR (3 downto 0);
-           Reset : in STD_LOGIC;
-           Clk : in STD_LOGIC;
-           En : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (3 downto 0));
-end Reg;
+ENTITY Reg IS
+    PORT (
+        D : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+        Reset : IN STD_LOGIC;
+        Clk : IN STD_LOGIC;
+        En : IN STD_LOGIC;
+        Q : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
+END Reg;
 
-architecture Behavioral of Reg is
+ARCHITECTURE Behavioral OF Reg IS
 
-Component D_FF
-    port( D : in STD_LOGIC;
-          Res : in STD_LOGIC;
-          Clk : in STD_LOGIC;
-          Q : out STD_LOGIC);
-end Component;
+    COMPONENT D_FF
+        PORT (
+            D : IN STD_LOGIC;
+            Res : IN STD_LOGIC;
+            En : IN STD_LOGIC;
+            Clk : IN STD_LOGIC;
+            Q : OUT STD_LOGIC);
+    END COMPONENT;
 
-signal Clk_With_Enabled : STD_LOGIC :='0';
-begin
+    SIGNAL Clk_With_Enabled : STD_LOGIC := '0';
+BEGIN
 
-    Clk_With_Enabled <= Clk and En;
+    Clk_With_Enabled <= Clk AND En;
 
-     gen_ff: for i in 0 to 3 generate
-        FF_inst: D_FF
-            port map(
-                D   => D(i),
-                Res => Reset,
-                Clk => Clk_With_Enabled,
-                Q   => Q(i)
-            );
-    end generate;
+    gen_ff : FOR i IN 0 TO 3 GENERATE
+        FF_inst : D_FF
+        PORT MAP(
+            D => D(i),
+            Res => Reset,
+            En => En,
+            Clk => Clk_With_Enabled,
+            Q => Q(i)
+        );
+    END GENERATE;
 
-end Behavioral;
+END Behavioral;
