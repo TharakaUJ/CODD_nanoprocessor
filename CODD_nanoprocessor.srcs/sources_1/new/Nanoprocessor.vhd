@@ -35,7 +35,9 @@ ENTITY Nanoprocessor IS
         reset : IN STD_LOGIC;
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
-        Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+        Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+        seg_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        Anode_7Seg : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -308,5 +310,8 @@ BEGIN
         address => data_out7,
         data => Cathode_7Seg
     );
+
+    seg_out <= data_out7(3 DOWNTO 0);
+    Anode_7Seg <= "1110";
 
 END Behavioral;
