@@ -36,30 +36,8 @@ ENTITY Nanoprocessor IS
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
         Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
-        reg_out0 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out1 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out2 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out3 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out4 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out5 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out6 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        reg_out7 : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        pc : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
-        printClock : OUT STD_LOGIC;
-        printInstruction : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
-        printJumpFlag : OUT STD_LOGIC;
-        printprogram_count_plus1 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        printJmpAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        printLoadSelect : OUT STD_LOGIC;
-        printadd_sub_output : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        printadd_sub_input_A : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        printadd_sub_input_B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        printAdd_Sub_Select : OUT STD_LOGIC;
-        printdata_in_reg_bank : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        printEnable_Reg : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
-        printR_A_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        printR_B_Select : OUT STD_LOGIC_VECTOR(2 DOWNTO 0)
-
+        Anode_7Seg : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        seg_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END Nanoprocessor;
 
@@ -283,7 +261,7 @@ BEGIN
     PORT MAP(
         clk => clk,
         register_enable => Enable_Reg,
-        register_bank_enable => R_Bank_Enable and program_count_4bit(0),
+        register_bank_enable => R_Bank_Enable AND program_count_4bit(0),
         reset => reset,
         data_in => data_in_reg_bank,
         data_out0 => data_out0,
@@ -341,30 +319,10 @@ BEGIN
     );
     program_count <= program_count_4bit(3 DOWNTO 1);
     program_counter_in <= program_counter_in_4bit(3 DOWNTO 1);
-    jump_address_4bit(3 downto 1) <= Jmp_Address;
+    jump_address_4bit(3 DOWNTO 1) <= Jmp_Address;
     jump_address_4bit(0) <= '0';
 
-    reg_out0 <= data_out0;
-    reg_out1 <= data_out1;
-    reg_out2 <= data_out2;
-    reg_out3 <= data_out3;
-    reg_out4 <= data_out4;
-    reg_out5 <= data_out5;
-    reg_out6 <= data_out6;
-    reg_out7 <= data_out7;
-    pc <= program_count;
-    printClock <= clk;
-    printInstruction <= instruction;
-    printJumpFlag <= Jmp_Flag;
-    printprogram_count_plus1 <= program_count_plus1;
-    printJmpAddress <= Jmp_Address;
-    printLoadSelect <= Load_Select;
-    printadd_sub_output <= add_sub_output;
-    printadd_sub_input_A <= add_sub_input_A;
-    printadd_sub_input_B <= add_sub_input_B;
-    printAdd_Sub_Select <= Add_Sub_Select;
-    printdata_in_reg_bank <= data_in_reg_bank;
-    printEnable_Reg <= Enable_Reg;
-    printR_A_Select <= R_A_Select;
-    printR_B_Select <= R_B_Select;
+    seg_out <= data_out7(3 DOWNTO 0);
+    Anode_7Seg <= "1110";
+
 END Behavioral;
