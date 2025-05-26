@@ -36,7 +36,7 @@ ENTITY Nanoprocessor IS
         overflow : OUT STD_LOGIC;
         zero : OUT STD_LOGIC;
         Cathode_7Seg : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
-        seg_out : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        seg_out: out STD_LOGIC_VECTOR(3 DOWNTO 0);
         Anode_7Seg : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     );
 END Nanoprocessor;
@@ -312,6 +312,6 @@ BEGIN
     );
 
     seg_out <= data_out7(3 DOWNTO 0);
-    Anode_7Seg <= "1110";
+    Anode_7Seg <= "1110"; -- Enable only the first 7-segment display
 
 END Behavioral;
